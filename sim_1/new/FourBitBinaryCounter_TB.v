@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: Justin Wymore
@@ -12,29 +12,45 @@
 // Description: 4-bit Binary counter output on 4 LED's with an asynchronous reset at button 0
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module FourBitBinaryCounter_TB;
+`timescale 1ns/1ps
+module FourBitBinaryCounter_TB();
+	
+	//inputs
 	reg clk;
 	reg reset;
-	parameter CLK_PERIOD = 8;
-	reg [3:0] Q;
-    
-    FourBitBinaryCounter DUT(
-    .clk (clk),
-    .reset (reset),
-    .Q (Q));
-        
-    initial begin
-    
-		clk = 0;
-		reset = 0;
 		
-		forever begin
-		#(CLK_PERIOD/2) clk = ~clk;
-		//#30 Reset <= 0;
-		//#50 Reset <= 1;
-		//#150 Reset <= 0;
-		end
+	//outputs
+	wire [3:0] Q;
+	
+	//DUT instantiation
+	FourBitBinaryCounter DUT(
+	.clk(clk),
+	.reset(reset),
+	.Q(Q)
+	);
+	
+	//clock generation
+	initial
+	begin
+		clk = 1'b0;
+		forever #5 clk = ~clk;
 	end
-    
+	
+	//always #5 clk = ~clk;
+	
+	//initialization
+	initial
+	begin
+		reset = 1'b0;
+	end
+	
+	//variation (fixed values/loops)
+	initial
+	begin
+		reset = 1'b1; #50;
+		reset = 1'b0; #50;
+	end
+	
+	//values to monitor
+
 endmodule
